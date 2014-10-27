@@ -13,6 +13,8 @@ class RoomsController extends AppController
     public function beforeFilter()
     {
         parent::beforeFilter();
+        $rooms = $this->Room->find('all');
+        $this->set(compact('rooms'));
     }
 
     /**
@@ -20,8 +22,7 @@ class RoomsController extends AppController
      */
     public function index()
     {
-        $rooms = $this->Room->find('all');
-        $this->set(compact('rooms'));
+
     }
 
     /**
@@ -55,6 +56,29 @@ class RoomsController extends AppController
      */
     public function view($room_id = null)
     {
+        if (!$room_id) {
+            $current_room = $this->Room->find('first', [
+                'conditions' => [
+                    'Room.id' => 1,
+                ],
+                'recursive' => -1,
+            ]);
+        } else {
+            $current_room = $this->Room->find('first', [
+                'conditions' => [
+                    'Room.id' => $room_id,
+                ],
+                'recursive' => -1,
+            ]);
+        }
+
+        $voices = $this->Voice->find('all', [
+            'conditions' => [
+                'Voice.room_id' => $current_room['Room']['id']
+            ]
+        ]);
+
+        $this->set(compact('current_room', 'voices'));
 
     }
 

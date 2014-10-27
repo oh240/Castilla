@@ -13,6 +13,14 @@ class VoicesController extends AppController
      *
      * @var mixed
      */
-    public $scaffold;
 
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+    }
+
+    public function ajax_add_voice()
+    {
+
+    }
 }
