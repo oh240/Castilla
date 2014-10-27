@@ -63,7 +63,8 @@ class UsersController extends AppController
 
     private function _postlogin($data)
     {
-        if ($this->Auth->login($data)) {
+        $this->request->data = $data;
+        if ($this->Auth->login()) {
             //ログイン完了
             $this->redirect('/');
         }
@@ -74,14 +75,10 @@ class UsersController extends AppController
 
     public function logout()
     {
-        if ($this->request->is('post')) {
-            $this->_postlogout($this->request->data);
+        if ($this->Auth->loggedIn()) {
+            $this->Auth->logout();
         }
-    }
 
-    private function _postlogout($data)
-    {
-        $this->Auth->logout($data);
         $this->redirect([
             'action' => 'login'
         ]);
