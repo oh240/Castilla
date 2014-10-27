@@ -1,0 +1,6 @@
+Plugin
+Vendor
+composer.phar
+Config/database.php
+tmp/cache
+tmp/logs
