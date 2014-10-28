@@ -1,3 +1,27 @@
+function notifyMe(notif_body) {
+
+    if (!Notification) {
+        alert('Please us a modern version of Chrome, Firefox, Opera or Firefox.');
+        return;
+    }
+
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+
+    var notification = new Notification('Notification title', {
+        icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+        body: notif_body
+    });
+
+    notification.onclick = function () {
+        window.open("http://stackoverflow.com/a/13328397/1269037");
+    }
+
+    //TODO音を鳴らしたい
+}
+
+
 var post_area = $('#msg_area');
 
 //WebSocket接続
@@ -20,7 +44,7 @@ $('#post_voice_button').click(function () {
     '</div>';
 
     //相手に送信
-    conn.send(print_voice_val);
+    conn.send(voice_val);
 
     // 自分の画面に出力
     post_area.append(print_voice_val);
@@ -40,5 +64,13 @@ $('#post_voice_button').click(function () {
 
 //WebSocketで接続しているユーザーへ送信
 conn.onmessage = function (e) {
-    post_area.append(e.data);
+
+    var print_voice_val = '<div class="post_article">' + e.data +
+        '<div class="post_time_area">' +
+        'post time:' + '2014 08-13 00:30:00' +
+        '</div>'
+    '</div>';
+    post_area.append(print_voice_val);
+    //firefoxでの通知が完了した
+    notifyMe(e.data);
 };
